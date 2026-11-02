@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PaperTrade">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<title>PaperTrade – Trading Simulator</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#111c2e;--panel2:#17243a;--line:#263650;--muted:#91a2bb;--text:#edf3fc;--green:#26d6a0;--red:#ff647c;--blue:#7895ff;--amber:#f5c76a;--shadow:0 14px 40px #0002}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 65% -20%,#1a2d4b 0,transparent 42%),var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer}
+.topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;border-bottom:1px solid var(--line);background:#0c1525eF;position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}.brand{font-size:20px;font-weight:850;letter-spacing:-.6px}.brand .mark{color:var(--green);margin-right:8px}.brand .paper{color:var(--green)}.topright{display:flex;align-items:center;gap:16px;color:var(--muted);font-size:12px}.status{display:inline-flex;align-items:center;gap:7px;color:var(--green)}.dot{height:7px;width:7px;background:currentColor;border-radius:50%;box-shadow:0 0 10px currentColor}.demo-pill{border:1px solid #354560;border-radius:30px;padding:6px 10px;letter-spacing:.7px;font-size:10px;font-weight:800;color:#b6c4d9}
+.shell{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 68px)}aside{padding:24px 14px;border-right:1px solid var(--line);background:#0c1524aa}.nav-label{margin:8px 10px 11px;color:#6f829f;font-size:10px;font-weight:800;letter-spacing:1.4px}.nav-item{display:flex;align-items:center;gap:11px;padding:11px 12px;margin:4px 0;border-radius:9px;color:#aebbd0;font-weight:600;text-decoration:none;cursor:pointer;transition:background .15s,color .15s}.nav-item:hover{background:#15243a;color:#fff}.nav-item.active{color:#fff;background:#1b2a43;box-shadow:inset 2px 0 var(--green)}.nav-icon{width:18px;text-align:center;color:#92a6c5}.side-account{margin-top:30px;padding:14px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(145deg,#15243a,#101a2a)}.side-account small{color:var(--muted)}.side-account strong{display:block;font-size:20px;margin:7px 0 3px;letter-spacing:-.5px}.side-note{font-size:11px;color:#7f91ab;padding:12px 5px;line-height:1.55}
+main{padding:25px;max-width:1580px;width:100%;margin:auto}.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:20px}.page-head h1{font-size:25px;letter-spacing:-.7px;margin:0 0 4px}.subtitle{color:var(--muted)}.ghost{border:1px solid var(--line);background:#142139;color:#c4d0e2;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700}.ghost:hover{border-color:#577094;background:#1a2a44}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:15px}.card{min-width:0;background:linear-gradient(145deg,#131f33,#101a2b);border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:var(--shadow)}.stat-label{font-size:12px;color:var(--muted);display:flex;align-items:center;justify-content:space-between}.stat-value{font-size:24px;font-weight:820;letter-spacing:-.8px;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.stat-foot{color:#7d90ac;font-size:10px;margin-top:4px}.positive{color:var(--green)!important}.negative{color:var(--red)!important}
+.main-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,.85fr);gap:14px}.chart-card{padding:17px}.chart-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.asset-heading{display:flex;align-items:center;gap:10px;min-width:0}.coin-icon{display:grid;place-items:center;width:37px;height:37px;border-radius:50%;background:#263956;color:#e4edff;font-weight:850;font-size:16px;flex-shrink:0}.asset-name{font-weight:800;font-size:15px}.symbol{color:var(--muted);font-size:11px;margin-left:5px}.asset-price{font-size:23px;font-weight:850;letter-spacing:-.6px;margin-top:2px}.asset-change{font-size:11px;margin-left:8px}.select{background:#111d30;border:1px solid var(--line);border-radius:8px;color:var(--text);padding:9px 10px;max-width:185px;outline:none}.chart-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 10px}.chart-controls .control-group{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.chart-controls label{font-size:10px;color:var(--muted);font-weight:700}.chart-controls .select{max-width:150px;padding:7px 9px;font-size:11px}.chart-wrap{height:370px;overflow:hidden;border-radius:9px;background:#0d1728;border:1px solid #1c2a40}.chart-wrap iframe{width:100%;height:100%;border:0}.chart-note{font-size:10px;color:#778ba7;margin-top:9px;line-height:1.5}.quote-state{font-size:10px;color:var(--muted);margin-top:7px}.trade-card{display:flex;flex-direction:column;gap:14px}.card-title{font-size:15px;font-weight:800;margin:0}.tabs{display:grid;grid-template-columns:1fr 1fr;background:#0b1423;border-radius:9px;padding:4px;gap:4px}.tabs button{border:0;border-radius:7px;padding:9px;background:transparent;color:#8fa1ba;font-weight:800}.tabs button.active.buy{background:#123b35;color:#5be4b9}.tabs button.active.sell{background:#45202c;color:#ff91a3}.field-label{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}.field{width:100%;padding:11px 12px;background:#0b1423;border:1px solid var(--line);border-radius:8px;color:var(--text);outline:none}.field:focus{border-color:var(--blue)}.quick-row{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}.quick-row button{border:1px solid #2b3c58;border-radius:6px;background:#192942;color:#b6c6dd;padding:5px 9px;font-size:10px}.quick-row button:hover{border-color:#7895ff}.order-line{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #24324a;font-size:11px;color:var(--muted)}.order-line strong{color:var(--text);font-size:12px}.trade-btn{width:100%;padding:12px;border:0;border-radius:9px;background:var(--green);color:#06271f;font-weight:850}.trade-btn.sell{background:var(--red);color:#350d16}.trade-btn:disabled{opacity:.45;cursor:not-allowed}.micro{color:#7d90a9;font-size:10px;line-height:1.5;margin:0}
+.market-card{margin:0 0 14px}.market-row{cursor:pointer;transition:background .15s}.market-row:hover{background:#192942}.market-row.selected{background:#152a36}.market-link{background:none;border:0;color:#eaf2ff;padding:0;text-align:left;font-weight:750}.market-link:hover{color:var(--green);text-decoration:underline}.source-link{color:#91a8d8;text-decoration:none}.source-link:hover{text-decoration:underline;color:#c5d5ff}.bottom-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;margin-top:14px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.section-head h2{font-size:14px;margin:0}.section-head span{color:var(--muted);font-size:10px}table{width:100%;border-collapse:collapse;text-align:left;white-space:nowrap}th{font-size:10px;color:#8294ae;font-weight:700;padding:9px 7px;border-bottom:1px solid var(--line)}td{font-size:11px;padding:11px 7px;border-bottom:1px solid #202e45}tbody tr:last-child td{border-bottom:0}.asset-cell{display:flex;align-items:center;gap:8px;font-weight:750}.tiny-coin{width:25px;height:25px;display:grid;place-items:center;background:#263956;border-radius:50%;font-size:10px}.sub{display:block;color:#8294ad;font-size:9px;font-weight:400}.empty{text-align:center;color:#8496b0;padding:24px 8px}.table-wrap{overflow-x:auto}.tag{font-size:9px;font-weight:800;padding:3px 6px;border-radius:5px}.tag.buy{background:#123c35;color:#63e5bd}.tag.sell{background:#47202b;color:#ff91a3}.footer{text-align:center;color:#6d809d;font-size:10px;padding:20px 0 10px}.toast{position:fixed;right:20px;bottom:20px;z-index:20;max-width:340px;padding:12px 15px;border:1px solid #3a5275;border-radius:10px;background:#1b2b44;color:#edf4ff;box-shadow:0 12px 40px #0008;display:none}.warning{margin:0 0 14px;border:1px solid #614e2b;background:#2b2418;color:#ecd49c;padding:10px 12px;border-radius:9px;font-size:11px;display:none}
+/* Tablet / iPad layout: keep navigation visible as a horizontal touch bar. */
+@media(max-width:1100px){
+  .shell{display:block;min-height:calc(100vh - 68px)}
+  aside{display:flex;align-items:center;gap:7px;overflow-x:auto;white-space:nowrap;padding:9px 16px;border-right:0;border-bottom:1px solid var(--line);background:#0c1524;position:sticky;top:68px;z-index:8;-webkit-overflow-scrolling:touch}
+  aside .nav-label,aside .side-account,aside .side-note{display:none}
+  .nav-item{flex:0 0 auto;margin:0;padding:10px 13px;min-height:42px}
+  main{padding:22px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chart-wrap{height:390px}
+}
+@media(max-width:820px){.main-grid{grid-template-columns:1fr}.bottom-grid{grid-template-columns:1fr}}
+@media(max-width:620px){
+  .topbar{padding:0 14px;height:60px;padding-top:env(safe-area-inset-top)}
+  .topright{gap:8px}.topright .status{font-size:10px}.demo-pill{display:none}
+  .shell{min-height:calc(100vh - 60px)}
+  aside{top:60px;padding:7px 10px;gap:5px}
+  .nav-item{padding:9px 11px;min-height:42px;font-size:12px}
+  main{padding:14px 12px calc(18px + env(safe-area-inset-bottom))}
+  .page-head h1{font-size:21px}.page-head{align-items:center}
+  .stats{gap:8px}.card{padding:12px}.stat-value{font-size:19px}
+  .chart-card{padding:12px}.chart-top{align-items:flex-start;flex-direction:column}
+  .select{max-width:none;width:100%;min-height:42px}
+  .chart-controls{align-items:stretch}.chart-controls .control-group{flex:1;min-width:135px;flex-direction:column;align-items:stretch}
+  .chart-controls .select{max-width:none;width:100%;min-height:42px}
+  .chart-wrap{height:340px}.asset-price{font-size:21px}
+  .field,.trade-btn,.tabs button,.ghost{min-height:44px}
+  .quick-row button{min-height:40px;padding:8px 12px}
+  .toast{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));max-width:none}
+}
+/* iPad touch comfort in both orientations. */
+@media (pointer:coarse) and (min-width:621px){
+  button,.select,.field{min-height:42px}
+  .quick-row button{min-height:40px}
+  .nav-item{min-height:44px}
+}
+
+.account-tools{display:flex;align-items:center;gap:8px}.account-tools select{max-width:170px}.account-tools button{border:1px solid var(--line);background:#142139;color:#dbe7fa;border-radius:8px;padding:8px 10px;font-size:11px;font-weight:800}
+.metals-note{font-size:10px;color:#91a2bb;margin-top:8px}.dip-box{border:1px solid #36523f;background:linear-gradient(145deg,#142b28,#10201f);border-radius:10px;padding:12px;display:grid;gap:9px}.dip-title{display:flex;justify-content:space-between;align-items:center;font-weight:800}.dip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dip-grid .field{padding:9px}.dip-status{font-size:10px;color:#a6cbbd;line-height:1.4}.dip-arm{background:#1d6b55;color:white;border:0;border-radius:8px;padding:9px;font-weight:800}.dip-arm:disabled{opacity:.5}.account-modal{position:fixed;inset:0;z-index:40;background:#050a13c9;display:none;align-items:center;justify-content:center;padding:18px}.account-modal.open{display:flex}.account-dialog{width:min(420px,100%);background:#142139;border:1px solid #344866;border-radius:15px;padding:18px;box-shadow:0 20px 70px #0009}.account-dialog h2{margin:0 0 12px;font-size:18px}.account-dialog label{display:block;color:#9eb0c9;font-size:12px;margin:10px 0 5px}.account-dialog input{width:100%;background:#0b1423;border:1px solid #344866;border-radius:8px;color:#edf3fc;padding:11px}.dialog-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}.dialog-actions button{padding:10px 13px;border-radius:8px;border:0;font-weight:800}.dialog-cancel{background:#263650;color:#dbe7fa}.dialog-create{background:var(--green);color:#06271f}.marker-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10px;color:#91a2bb;margin-top:7px}.marker-legend b{font-weight:800}.buy-dot{color:var(--green)}.sell-dot{color:var(--red)}
+@media(max-width:620px){.account-tools{gap:5px}.account-tools select{max-width:125px;padding:7px;font-size:10px}.account-tools button{padding:7px;font-size:10px}.dip-grid{grid-template-columns:1fr 1fr}}
+</style>
+<script src="https://unpkg.com/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js"></script>
+</head><body>
+<header class="topbar">
+  <div class="brand"><span class="mark">◈</span><span class="paper">Paper</span>Trade</div>
+  <div class="topright"><span class="status"><i class="dot"></i><span id="connectionLabel">Verbinde…</span></span><div class="account-tools"><select id="accountSelect" class="select" aria-label="Demo-Konto wählen"></select><button id="newAccountBtn" type="button">+ Konto</button></div><span class="demo-pill">PAPER · DEMO</span></div>
+</header>
+<div class="shell">
+  <aside>
+    <div class="nav-label">TRADING</div>
+    <a class="nav-item active" href="#dashboard" data-nav="dashboard"><span class="nav-icon">▦</span> Übersicht</a>
+    <a class="nav-item" href="#markets" data-nav="markets"><span class="nav-icon">⌁</span> Märkte</a>
+    <a class="nav-item" href="#portfolio" data-nav="portfolio"><span class="nav-icon">▤</span> Portfolio</a>
+    <a class="nav-item" href="#history" data-nav="history"><span class="nav-icon">◷</span> Trade-Verlauf</a>
+    <div class="nav-label" style="margin-top:28px">AKTIVES DEMO-KONTO</div>
+    <div class="side-account"><small>Virtuelles Guthaben</small><strong id="sideCash">10.000,00 €</strong><small id="sideStart">Startkapital: 10.000 €</small></div>
+    <div class="side-note">Nur virtuelles Geld. Es werden keine echten Börsenorders ausgeführt.</div>
+  </aside>
+  <main>
+    <div class="page-head" id="dashboard"><div><h1>Trading-Dashboard</h1><div class="subtitle">Übe mit echten Marktdaten – ohne echtes Geld.</div></div><button class="ghost" id="resetBtn">↺ Konto zurücksetzen</button></div>
+    <p id="apiWarning" class="warning"></p>
+    <section class="stats">
+      <div class="card"><div class="stat-label">Gesamtvermögen <span>◈</span></div><div class="stat-value" id="totalValue">10.000,00 €</div><div class="stat-foot">Guthaben + aktueller Positionswert</div></div>
+      <div class="card"><div class="stat-label">Freies Guthaben <span>€</span></div><div class="stat-value" id="cashValue">10.000,00 €</div><div class="stat-foot">Für neue Käufe verfügbar</div></div>
+      <div class="card"><div class="stat-label">Offene Positionen <span>▤</span></div><div class="stat-value" id="positionCount">0</div><div class="stat-foot">Assets in deinem Portfolio</div></div>
+      <div class="card"><div class="stat-label">Gesamt Gewinn / Verlust <span>↗</span></div><div class="stat-value" id="pnlValue">0,00 €</div><div class="stat-foot">Gegenüber dem Startkapital</div></div>
+    </section>
+    <section id="markets" class="card market-card">
+      <div class="section-head"><h2>Marktübersicht</h2><span>Kurse in EUR · Asset anklicken</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Asset</th><th>Preis</th><th>Veränderung</th><th>Aktion</th></tr></thead><tbody id="marketsBody"><tr><td colspan="4" class="empty">Lade Marktdaten…</td></tr></tbody></table></div>
+      <div class="metals-note">Gold- und Silber-Spotpreise je Feinunze. Spotpreise sind Referenzkurse, keine Händler-An- oder Verkaufspreise. Quellen: <a class="source-link" href="https://xaus.com/api/" target="_blank" rel="noopener">XAUS Spot- und historische Metalldaten</a> · <a class="source-link" href="https://api.gold-api.com/docs" target="_blank" rel="noopener">Gold API</a>. Krypto-USDT wird mit dem USD/EUR-Wechselkurs umgerechnet.
+    </section>
+    <section class="main-grid" id="trading">
+      <div class="card chart-card" id="chart">
+        <div class="chart-top">
+          <div class="asset-heading"><div id="coinIcon" class="coin-icon">₿</div><div><div><span id="assetName" class="asset-name">Bitcoin</span><span id="assetSymbol" class="symbol">BTC/USDT</span></div><div><span id="assetPrice" class="asset-price">Lade Kurs…</span><span id="assetChange" class="asset-change"></span></div></div></div>
+          <select id="assetSelect" class="select" aria-label="Asset wählen"></select>
+        </div>
+        <div class="chart-controls" aria-label="Chart-Einstellungen">
+          <div class="control-group"><label for="chartInterval">Zeitraum</label><select id="chartInterval" class="select"><option value="1">1 Minute</option><option value="5">5 Minuten</option><option value="15">15 Minuten</option><option value="30">30 Minuten</option><option value="60" selected>1 Stunde</option><option value="240">4 Stunden</option><option value="1D">1 Tag</option><option value="1W">1 Woche</option></select></div>
+          <div class="control-group"><label for="chartStyle">Kursanzeige</label><select id="chartStyle" class="select"><option value="1" selected>Kerzen</option><option value="0">Balken</option><option value="2">Linie</option><option value="3">Fläche</option></select></div>
+        </div>
+        <div class="chart-wrap" id="chartWrap" style="height:390px"><div id="priceChart" style="width:100%;height:100%"></div></div>
+        <div class="marker-legend"><span><b class="buy-dot">▲ KAUF</b> = dein Kauf</span><span><b class="sell-dot">▼ VERKAUF</b> = dein Verkauf</span></div>
+        <div class="chart-note">Echte historische Kursdaten. Deine simulierten Käufe und Verkäufe werden als Marker im Chart angezeigt. Krypto: Binance · Metalle: Gold-/Silber-Spotdaten.</div>
+        <div id="quoteState" class="quote-state">Warte auf Kursdaten…</div>
+      </div>
+      <div class="card trade-card">
+        <h2 class="card-title">Order platzieren</h2>
+        <div class="tabs"><button id="buyTab" class="active buy">Kaufen</button><button id="sellTab">Verkaufen</button></div>
+        <div><label class="field-label">Ausgewähltes Asset</label><strong id="tradeAsset">Bitcoin (BTC)</strong></div>
+        <div><label class="field-label" for="amount" id="amountLabel">Menge (Coin)</label><input id="amount" class="field" type="number" min="0" step="any" placeholder="z. B. 0,01" inputmode="decimal"></div>
+        <div class="quick-row" id="quickAmounts"><button data-qty="0.001">0,001</button><button data-qty="0.01">0,01</button><button data-qty="0.1">0,1</button><button data-qty="1">1</button></div>
+        <div class="order-line"><span>Aktueller Kurs</span><strong id="orderPrice">–</strong></div>
+        <div class="order-line"><span>Geschätzter Gesamtwert inkl. Gebühr</span><strong id="orderTotal">0,00 €</strong></div>
+        <div class="order-line"><span>Ordertyp</span><strong>Market · simuliert</strong></div>
+        <button id="tradeBtn" class="trade-btn" disabled>Bitcoin kaufen</button>
+        <p class="micro">Simulierte Market-Order · Handelsgebühr: 0,1 % pro Kauf und Verkauf. Kein echtes Geld.</p>
+        <div class="dip-box">
+          <div class="dip-title"><span>↘ Buy the Dip</span><span id="dipBadge" class="tag buy">AUS</span></div>
+          <div class="micro">Automatischer virtueller Kauf, wenn der Kurs seit Aktivierung um deinen gewählten Prozentsatz fällt.</div>
+          <div class="dip-grid"><div><label class="field-label" for="dipDrop">Kursrückgang (%)</label><input id="dipDrop" class="field" type="number" min="0.1" max="50" step="0.1" value="3"></div><div><label class="field-label" for="dipAmount">Kaufbetrag (€)</label><input id="dipAmount" class="field" type="number" min="1" step="1" value="50"></div></div>
+          <div class="dip-status" id="dipStatus">Wähle einen Rückgang und aktiviere die Strategie.</div>
+          <button class="dip-arm" id="dipArmBtn" type="button">Buy the Dip aktivieren</button>
+        </div>
+      </div>
+    </section>
+    <section class="bottom-grid">
+      <div class="card" id="portfolio"><div class="section-head"><h2>Dein Portfolio</h2><span>Offene Positionen</span></div><div class="table-wrap"><table><thead><tr><th>Asset</th><th>Menge</th><th>Marktwert</th><th>Gewinn / Verlust</th></tr></thead><tbody id="positionsBody"><tr><td colspan="4" class="empty">Noch keine Positionen. Starte deinen ersten Trade!</td></tr></tbody></table></div></div>
+      <div class="card" id="history"><div class="section-head"><h2>Letzte Trades</h2><span>Historie des aktiven Kontos</span></div><div class="table-wrap"><table><thead><tr><th>Typ</th><th>Asset</th><th>Menge</th><th>Wert</th></tr></thead><tbody id="historyBody"><tr><td colspan="4" class="empty">Noch keine Trades.</td></tr></tbody></table></div></div>
+    </section>
+    <div class="footer">PaperTrade ist ein privater Übungssimulator, kein Broker und keine Anlageberatung. Gold/Silber zeigen indikative Spotpreise je Feinunze, nicht den Preis eines physischen Produkts.</div>
+  </main>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div class="account-modal" id="accountModal" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle"><div class="account-dialog"><h2 id="accountModalTitle">Neues Demo-Konto</h2><label for="newAccountName">Kontoname</label><input id="newAccountName" maxlength="28" placeholder="z. B. Langzeit-Portfolio"><label for="newAccountCapital">Startkapital in Euro</label><input id="newAccountCapital" type="number" min="1" max="100000000" step="100" value="10000"><div class="dialog-actions"><button class="dialog-cancel" id="cancelAccountBtn">Abbrechen</button><button class="dialog-create" id="createAccountBtn">Konto erstellen</button></div></div></div>
+<script>
+(() => {
+'use strict';
+const ASSETS={
+ BTCUSDT:{name:'Bitcoin',symbol:'BTC',icon:'₿',type:'crypto',intervals:true},ETHUSDT:{name:'Ethereum',symbol:'ETH',icon:'Ξ',type:'crypto',intervals:true},SOLUSDT:{name:'Solana',symbol:'SOL',icon:'◎',type:'crypto',intervals:true},BNBUSDT:{name:'BNB',symbol:'BNB',icon:'B',type:'crypto',intervals:true},XRPUSDT:{name:'XRP',symbol:'XRP',icon:'X',type:'crypto',intervals:true},DOGEUSDT:{name:'Dogecoin',symbol:'DOGE',icon:'Ð',type:'crypto',intervals:true},ADAUSDT:{name:'Cardano',symbol:'ADA',icon:'A',type:'crypto',intervals:true},AVAXUSDT:{name:'Avalanche',symbol:'AVAX',icon:'A',type:'crypto',intervals:true},LINKUSDT:{name:'Chainlink',symbol:'LINK',icon:'L',type:'crypto',intervals:true},LTCUSDT:{name:'Litecoin',symbol:'LTC',icon:'Ł',type:'crypto',intervals:true},
+ XAU:{name:'Gold',symbol:'XAU',icon:'Au',type:'metal',unit:'Feinunze',source:'gold'},XAG:{name:'Silber',symbol:'XAG',icon:'Ag',type:'metal',unit:'Feinunze',source:'silver'},XPT:{name:'Platin',symbol:'XPT',icon:'Pt',type:'metal',unit:'Feinunze',source:'goldapi'},XPD:{name:'Palladium',symbol:'XPD',icon:'Pd',type:'metal',unit:'Feinunze',source:'goldapi'}
+};
+const STORE_KEY='papertrade_multi_accounts_v2', CHART_KEY='papertrade_chart_settings_v2', FEE_RATE=.001;
+const $=id=>document.getElementById(id),money=n=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number.isFinite(n)?n:0),qtyFmt=n=>new Intl.NumberFormat('de-DE',{maximumFractionDigits:8}).format(n),pct=n=>(n>=0?'+':'')+new Intl.NumberFormat('de-DE',{maximumFractionDigits:2}).format(n)+'%';
+let prices={},changes={},priceTimes={},chartHistory={},selected='BTCUSDT',side='buy',chartSettings=loadChartSettings(),chart=null,series=null,chartKind=null,quoteReady=false,cryptoUpdated=null,metalUpdated=null,metalFx=1,usdToEur=0.92;
+function freshAccount(name='Demo-Konto',capital=10000){return{id:'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,7),name,startCapital:capital,cash:capital,positions:{},history:[],dip:{}}}
+function loadStore(){try{const s=JSON.parse(localStorage.getItem(STORE_KEY));if(s&&Array.isArray(s.accounts)&&s.accounts.length)return s;}catch(e){};let legacy=null;try{legacy=JSON.parse(localStorage.getItem('papertrade_local_account_v1'));}catch(e){};const a=freshAccount('Mein Demo-Konto',legacy&&Number.isFinite(legacy.cash)?legacy.cash:10000);if(legacy){a.positions=legacy.positions||{};a.history=legacy.history||[];a.startCapital=a.cash+Object.values(a.positions).reduce((n,p)=>n+(p.cost||0),0);}return{accounts:[a],activeId:a.id}}
+let store=loadStore();
+function active(){return store.accounts.find(a=>a.id===store.activeId)||store.accounts[0]}
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(store));}catch(e){notify('Speicher voll oder Browser-Speicherung nicht verfügbar.');}}
+function loadChartSettings(){try{const s=JSON.parse(localStorage.getItem(CHART_KEY)||'null');return{interval:s?.interval||'60',style:s?.style||'1'};}catch(e){return{interval:'60',style:'1'}}}
+function saveChartSettings(){localStorage.setItem(CHART_KEY,JSON.stringify(chartSettings));}
+function notify(t){$('toast').textContent=t;$('toast').style.display='block';clearTimeout(notify.timer);notify.timer=setTimeout(()=>$('toast').style.display='none',3500)}
+function eurPrice(s){return prices[s]||0}
+function accountTotals(a=active()){let mv=0;for(const [s,p] of Object.entries(a.positions))mv+=(prices[s]||p.avgPrice||0)*p.qty;return{marketValue:mv,total:a.cash+mv,pnl:a.cash+mv-a.startCapital}}
+function renderAccountSelector(){const sel=$('accountSelect');sel.innerHTML=store.accounts.map(a=>`<option value="${a.id}">${escapeHtml(a.name)}</option>`).join('');sel.value=store.activeId;}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderAssetSelect(){const sel=$('assetSelect');sel.innerHTML='<optgroup label="Kryptowährungen">'+Object.entries(ASSETS).filter(([,a])=>a.type==='crypto').map(([s,a])=>`<option value="${s}">${a.name} · ${a.symbol}</option>`).join('')+'</optgroup><optgroup label="Edelmetalle">'+Object.entries(ASSETS).filter(([,a])=>a.type==='metal').map(([s,a])=>`<option value="${s}">${a.name} · ${a.symbol}</option>`).join('')+'</optgroup>';sel.value=selected;}
+function setStatus(text,ok=true){$('connectionLabel').textContent=text;$('connectionLabel').style.color=ok?'var(--green)':'var(--amber)'}
+async function fetchFx(){try{const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=EUR',{cache:'no-store'});if(!r.ok)throw Error('FX');const d=await r.json();if(Number(d.rates?.EUR)>0)usdToEur=Number(d.rates.EUR);}catch(e){/* use last known conversion */}}
+async function fetchCrypto(){
+ const symbols=Object.keys(ASSETS).filter(s=>ASSETS[s].type==='crypto');
+ let missing=[...symbols];
+ try{
+  const q=encodeURIComponent(JSON.stringify(symbols));
+  const r=await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbols=${q}`,{cache:'no-store'});
+  if(!r.ok)throw Error('Binance '+r.status);
+  const rows=await r.json();
+  for(const row of rows){
+   if(ASSETS[row.symbol]&&Number(row.lastPrice)>0){
+    prices[row.symbol]=Number(row.lastPrice)*usdToEur;
+    changes[row.symbol]=Number(row.priceChangePercent);
+    priceTimes[row.symbol]=Date.now();
+   }
+  }
+  missing=symbols.filter(s=>!prices[s]);
+ }catch(e){missing=symbols.filter(s=>!prices[s]);}
+ if(missing.length){
+  const results=await Promise.allSettled(missing.map(async symbol=>{
+   const ticker=ASSETS[symbol].symbol;
+   const r=await fetch(`https://api.coinbase.com/v2/prices/${ticker}-EUR/spot`,{cache:'no-store',credentials:'omit'});
+   if(!r.ok)throw Error('Coinbase '+ticker+' '+r.status);
+   const d=await r.json(),value=Number(d.data?.amount);
+   if(!(value>0))throw Error('No spot price '+ticker);
+   prices[symbol]=value;priceTimes[symbol]=Date.now();
+   if(!Number.isFinite(changes[symbol]))changes[symbol]=0;
+  }));
+  missing=missing.filter((symbol,i)=>results[i].status==='rejected');
+ }
+ const krakenPairs={
+  BTCUSDT:'XBTZEUR', ETHUSDT:'ETHEUR', SOLUSDT:'SOLEUR', BNBUSDT:'BNBEUR',
+  XRPUSDT:'XRPEUR', DOGEUSDT:'XDGEUR', ADAUSDT:'ADAEUR', AVAXUSDT:'AVAXEUR',
+  LINKUSDT:'LINKEUR', LTCUSDT:'LTCEUR'
+ };
+ if(missing.length){
+  await Promise.allSettled(missing.map(async symbol=>{
+   const pair=krakenPairs[symbol];if(!pair)throw Error('Kein Kraken-Paar für '+symbol);
+   const r=await fetch(`https://api.kraken.com/0/public/Ticker?pair=${pair}`,{cache:'no-store',credentials:'omit'});
+   if(!r.ok)throw Error('Kraken '+symbol+' '+r.status);
+   const d=await r.json();if(d.error?.length)throw Error(d.error.join(', '));
+   const ticker=Object.values(d.result||{})[0],value=Number(ticker?.c?.[0]);
+   if(!(value>0))throw Error('Kein Kraken-Kurs für '+symbol);
+   prices[symbol]=value;const open=Number(ticker?.o);
+   if(open>0)changes[symbol]=(value/open-1)*100;
+   priceTimes[symbol]=Date.now();
+  }));
+ }
+ const available=symbols.filter(s=>prices[s]&&prices[s]>0),unavailable=symbols.length-available.length;
+ cryptoUpdated=new Date();quoteReady=available.length>0;
+ if(unavailable===0)setStatus('Krypto-Livekurse verbunden',true);
+ else if(available.length>0)setStatus(`Krypto-Kurse teilweise verfügbar (${available.length}/${symbols.length})`,false);
+ else setStatus('Krypto-Kurse nicht erreichbar',false);
+}
+async function fetchMetals(){
+ const symbols=['XAU','XAG','XPT','XPD'];
+ const results=await Promise.allSettled(symbols.map(async symbol=>{
+  const r=await fetch(`https://api.gold-api.com/price/${symbol}/EUR`,{cache:'no-store'});
+  if(!r.ok)throw Error(symbol+' '+r.status);
+  const d=await r.json(),value=Number(d.price);
+  if(!(value>0))throw Error('Kein gültiger '+symbol+'-Kurs');
+  prices[symbol]=value;
+  priceTimes[symbol]=d.updatedAt?new Date(d.updatedAt).getTime():Date.now();
+ }));
+ const failed=results.filter(x=>x.status==='rejected').length;
+ metalUpdated=new Date();
+ if(failed===0)$('apiWarning').textContent='';
+ else if(failed<symbols.length)$('apiWarning').textContent='Einige Metallkurse sind momentan nicht verfügbar. Angezeigt werden nur bestätigte Spotpreise.';
+ else $('apiWarning').textContent='Gold-/Silber-/Edelmetallkurse sind momentan nicht erreichbar. Es werden keine Ersatzkurse erfunden.';
+ render();
+}
+function render(){const a=ASSETS[selected],p=eurPrice(selected),c=changes[selected]||0;$('coinIcon').textContent=a.icon;$('assetName').textContent=a.name;$('assetSymbol').textContent=a.type==='metal'?`${a.symbol} · EUR/${a.unit}`:`${a.symbol}/USDT`;$('assetPrice').textContent=p?money(p)+(a.type==='metal'?' / oz':''):'Keine Kursdaten';$('assetChange').textContent=a.type==='crypto'&&prices[selected]?pct(c):'Spot';$('assetChange').className='asset-change '+(c>=0?'positive':'negative');$('tradeAsset').textContent=`${a.name} (${a.symbol})`;$('orderPrice').textContent=p?money(p)+(a.type==='metal'?' / oz':''):'–';$('amountLabel').textContent=a.type==='metal'?'Menge (Feinunzen)':'Menge (Coin)';$('amount').placeholder=a.type==='metal'?'z. B. 0,1':'z. B. 0,01';$('chartInterval').disabled=a.type==='metal';$('chartInterval').value=a.type==='metal'?'1D':chartSettings.interval;$('sideCash').textContent=money(active().cash);$('sideStart').textContent='Startkapital: '+money(active().startCapital);const t=accountTotals();$('totalValue').textContent=money(t.total);$('cashValue').textContent=money(active().cash);$('positionCount').textContent=Object.values(active().positions).filter(p=>p.qty>1e-12).length;$('pnlValue').textContent=(t.pnl>0?'+':'')+money(t.pnl);$('pnlValue').className='stat-value '+(t.pnl>=0?'positive':'negative');$('quoteState').textContent=`Krypto: ${cryptoUpdated?cryptoUpdated.toLocaleTimeString('de-DE'):'–'} · Metalle: ${metalUpdated?metalUpdated.toLocaleTimeString('de-DE'):'–'} · Trades werden im Chart markiert.`;$('tradeBtn').disabled=!prices[selected];renderMarkets();renderPositions();renderHistory();updateEstimate();renderDip();renderChartMarkers();}
+function renderMarkets(){$('marketsBody').innerHTML=Object.entries(ASSETS).map(([s,a])=>{const p=prices[s],c=changes[s];return `<tr class="market-row${s===selected?' selected':''}" data-symbol="${s}"><td><div class="asset-cell"><span class="tiny-coin">${a.icon}</span><span>${a.name}<span class="sub">${a.symbol}${a.type==='metal'?' · Feinunze':'/USDT'}</span></span></div></td><td>${p?money(p)+(a.type==='metal'?' / oz':''):'–'}</td><td class="${(c||0)>=0?'positive':'negative'}">${a.type==='crypto'&&Number.isFinite(c)?pct(c):'Spot'}</td><td><button class="market-link" type="button" data-symbol="${s}">Chart öffnen →</button></td></tr>`}).join('')}
+function renderPositions(){const a=active(),entries=Object.entries(a.positions).filter(([,p])=>p.qty>1e-12);$('positionsBody').innerHTML=entries.length?entries.map(([s,p])=>{const meta=ASSETS[s],v=eurPrice(s)*p.qty,pl=v-p.cost;return `<tr><td><button class="market-link" data-symbol="${s}"><span class="asset-cell"><span class="tiny-coin">${meta.icon}</span><span>${meta.name}<span class="sub">${meta.symbol}</span></span></span></button></td><td>${qtyFmt(p.qty)}</td><td>${money(v)}</td><td class="${pl>=0?'positive':'negative'}">${pl>0?'+':''}${money(pl)}</td></tr>`}).join(''):'<tr><td colspan="4" class="empty">Noch keine Positionen.</td></tr>'}
+function renderHistory(){const h=active().history;$('historyBody').innerHTML=h.length?h.slice(0,14).map(t=>`<tr><td><span class="tag ${t.side}">${t.side==='buy'?'KAUF':'VERKAUF'}</span></td><td><button class="market-link" data-symbol="${t.symbol}">${ASSETS[t.symbol]?.symbol||t.symbol}</button></td><td>${qtyFmt(t.qty)}</td><td>${money(t.value)}</td></tr>`).join(''):'<tr><td colspan="4" class="empty">Noch keine Trades.</td></tr>'}
+function updateEstimate(){const q=Number($('amount').value)||0,g=q*eurPrice(selected);$('orderTotal').textContent=money(side==='buy'?g*(1+FEE_RATE):g*(1-FEE_RATE));}
+function setSide(s){side=s;$('buyTab').classList.toggle('active',s==='buy');$('sellTab').classList.toggle('active',s==='sell');$('buyTab').classList.toggle('buy',s==='buy');$('sellTab').classList.toggle('sell',s==='sell');$('tradeBtn').classList.toggle('sell',s==='sell');$('tradeBtn').textContent=`${ASSETS[selected].name} ${s==='buy'?'kaufen':'verkaufen'}`;updateEstimate();}
+function addTrade(s,tradeSide,q,price,automated=false){const a=active(),gross=q*price,fee=gross*FEE_RATE;if(tradeSide==='buy'){const total=gross+fee;if(total>a.cash+1e-8)return false;a.cash-=total;const p=a.positions[s]||{qty:0,cost:0,avgPrice:price};p.qty+=q;p.cost+=total;p.avgPrice=p.cost/p.qty;a.positions[s]=p;}else{const p=a.positions[s];if(!p||q>p.qty+1e-10)return false;const share=p.cost*(q/p.qty);p.qty-=q;p.cost-=share;a.cash+=gross-fee;if(p.qty<1e-10)delete a.positions[s];}a.history.unshift({side:tradeSide,symbol:s,qty:q,value:gross,price,time:Date.now(),automated});a.history=a.history.slice(0,500);save();return true;}
+function executeTrade(){const q=Number($('amount').value),p=eurPrice(selected);if(!(q>0)||!(p>0)){notify('Bitte eine gültige Menge und einen aktuellen Kurs eingeben.');return;}if(!addTrade(selected,side,q,p)){notify(side==='buy'?'Nicht genug virtuelles Guthaben.':'Du besitzt nicht genügend von diesem Asset.');return;}$('amount').value='';render();loadChart();notify(`${side==='buy'?'Kauf':'Verkauf'} simuliert: ${qtyFmt(q)} ${ASSETS[selected].symbol}.`);}
+function selectAsset(s){if(!ASSETS[s])return;selected=s;$('assetSelect').value=s;$('amount').value='';setSide(side);render();loadChart();}
+function createChart(){const el=$('priceChart');el.innerHTML='';if(!window.LightweightCharts){el.textContent='Chart-Bibliothek konnte nicht geladen werden. Bitte Internetverbindung prüfen.';return;}chart=LightweightCharts.createChart(el,{width:el.clientWidth,height:el.clientHeight,layout:{background:{color:'#0d1728'},textColor:'#9aabc3'},grid:{vertLines:{color:'#1b2940'},horzLines:{color:'#1b2940'}},rightPriceScale:{borderColor:'#263650'},timeScale:{borderColor:'#263650',timeVisible:true,secondsVisible:false},crosshair:{mode:0}});chartKind=null;new ResizeObserver(()=>{if(chart)chart.applyOptions({width:el.clientWidth,height:el.clientHeight});}).observe(el);}
+function chartInterval(){if(ASSETS[selected].type==='metal')return '1D';return chartSettings.interval;}
+async function getChartData(){const a=ASSETS[selected];if(a.type==='crypto'){
+ const interval=chartSettings.interval==='1D'?'1d':chartSettings.interval==='1W'?'1w':chartSettings.interval;
+ // Primary source: Binance historical candles.
+ try{
+  const r=await fetch(`https://api.binance.com/api/v3/klines?symbol=${selected}&interval=${interval}&limit=500`,{cache:'no-store'});
+  if(!r.ok)throw Error('Binance chart '+r.status);
+  const rows=await r.json();
+  if(!Array.isArray(rows)||!rows.length)throw Error('Keine Binance-Kerzen');
+  return rows.map(k=>({time:Math.floor(k[0]/1000),open:+k[1]*usdToEur,high:+k[2]*usdToEur,low:+k[3]*usdToEur,close:+k[4]*usdToEur}));
+ }catch(binanceError){}
+ // Fallback: Coinbase historical candles. Coinbase returns [time, low, high, open, close, volume].
+ const ticker=ASSETS[selected].symbol;
+ const granularityMap={'1m':60,'5m':300,'15m':900,'30m':1800,'1h':3600,'4h':21600,'1d':86400,'1w':604800};
+ const granularity=granularityMap[interval]||3600;
+ try{
+  const r=await fetch(`https://api.exchange.coinbase.com/products/${ticker}-EUR/candles?granularity=${granularity}`,{cache:'no-store',credentials:'omit'});
+  if(!r.ok)throw Error('Coinbase chart '+r.status);
+  const rows=await r.json();
+  if(!Array.isArray(rows)||!rows.length)throw Error('Keine Coinbase-Kerzen');
+  return rows.map(k=>({time:Number(k[0]),open:Number(k[3]),high:Number(k[2]),low:Number(k[1]),close:Number(k[4])})).filter(k=>Number.isFinite(k.time)&&k.close>0).sort((x,y)=>x.time-y.time);
+ }catch(coinbaseError){}
+ // Last fallback: Kraken OHLC. Kraken timestamps are seconds and prices are already EUR.
+ const krakenPairs={BTCUSDT:'XBTZEUR',ETHUSDT:'ETHEUR',SOLUSDT:'SOLEUR',BNBUSDT:'BNBEUR',XRPUSDT:'XRPEUR',DOGEUSDT:'XDGEUR',ADAUSDT:'ADAEUR',AVAXUSDT:'AVAXEUR',LINKUSDT:'LINKEUR',LTCUSDT:'LTCEUR'};
+ const krakenIntervals={'1m':1,'5m':5,'15m':15,'30m':30,'1h':60,'4h':240,'1d':1440,'1w':10080};
+ const pair=krakenPairs[selected],kInterval=krakenIntervals[interval]||60;
+ if(!pair)throw Error('Keine historische Kursquelle für '+selected);
+ const r=await fetch(`https://api.kraken.com/0/public/OHLC?pair=${pair}&interval=${kInterval}`,{cache:'no-store',credentials:'omit'});
+ if(!r.ok)throw Error('Kraken chart '+r.status);
+ const d=await r.json();if(d.error?.length)throw Error(d.error.join(', '));
+ const rows=Object.values(d.result||{}).find(v=>Array.isArray(v));
+ if(!rows?.length)throw Error('Keine Kraken-Kerzen');
+ return rows.map(k=>({time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4])})).filter(k=>Number.isFinite(k.time)&&k.close>0);
+ }
+ if(selected==='XAU'){const r=await fetch('https://xaus.com/api/v1/history',{cache:'no-store'});if(!r.ok)throw Error('Goldhistorie');const d=await r.json();return (d.points||[]).map((p,i,arr)=>({time:Math.floor(new Date(p.d).getTime()/1000),open:(i?Number(arr[i-1].c):Number(p.c))*metalFx,high:Number(p.h||p.c)*metalFx,low:Number(p.l||p.c)*metalFx,close:Number(p.c)*metalFx})).filter(x=>Number.isFinite(x.time)&&x.close>0);}
+ if(a.type==='metal'){const sym={XAG:'silver',XPT:'platinum',XPD:'palladium'}[selected];if(!sym)return[];const r=await fetch(`https://xaus.com/api/v1/chart?symbol=${sym}&range=5y&interval=1d`,{cache:'no-store'});if(!r.ok)throw Error('Metallhistorie');const d=await r.json();return (d.points||[]).map(p=>({time:Number(p.t),open:Number(p.o)*metalFx,high:Number(p.h)*metalFx,low:Number(p.l)*metalFx,close:Number(p.c)*metalFx})).filter(x=>Number.isFinite(x.time)&&x.close>0);}
+ return [];
+}
+function seriesMarkers(data){const trades=active().history.filter(t=>t.symbol===selected);if(!trades.length||!data.length)return[];const times=data.map(x=>x.time);return trades.map(t=>{let target=ASSETS[selected].type==='crypto'?Math.floor(t.time/1000):Math.floor(new Date(new Date(t.time).toISOString().slice(0,10)+'T00:00:00Z').getTime()/1000);let lo=0,hi=times.length-1;while(lo<hi){const mid=(lo+hi)>>1;if(times[mid]<target)lo=mid+1;else hi=mid;}let idx=lo;if(idx>0&&Math.abs(times[idx-1]-target)<Math.abs(times[idx]-target))idx--;return{time:times[idx],position:t.side==='buy'?'belowBar':'aboveBar',color:t.side==='buy'?'#26d6a0':'#ff647c',shape:t.side==='buy'?'arrowUp':'arrowDown',text:(t.side==='buy'?'KAUF':'VERKAUF')+' '+qtyFmt(t.qty)};}).sort((a,b)=>a.time-b.time);}
+async function loadChart(){if(!chart)createChart();if(!chart)return;try{const data=await getChartData();if(!data.length)throw Error('Keine historischen Daten');const style=chartSettings.style;const kind=style==='0'?'bar':style==='1'?'candle':style==='2'?'line':'area';if(series&&chartKind!==kind){chart.removeSeries(series);series=null;}if(!series){if(kind==='bar')series=chart.addBarSeries({upColor:'#26d6a0',downColor:'#ff647c',openVisible:true,thinBars:false});else if(kind==='candle')series=chart.addCandlestickSeries({upColor:'#26d6a0',downColor:'#ff647c',borderUpColor:'#26d6a0',borderDownColor:'#ff647c',wickUpColor:'#26d6a0',wickDownColor:'#ff647c'});else if(kind==='line')series=chart.addLineSeries({color:'#7895ff',lineWidth:2});else series=chart.addAreaSeries({lineColor:'#7895ff',topColor:'#7895ff55',bottomColor:'#7895ff05',lineWidth:2});chartKind=kind;}
+ const plotted=kind==='line'||kind==='area'?data.map(x=>({time:x.time,value:x.close})):data;series.setData(plotted);if(series.setMarkers)series.setMarkers(seriesMarkers(data));chart.timeScale().fitContent();chartHistory[selected]=data;
+ }catch(e){$('priceChart').innerHTML='<div style="padding:20px;color:#91a2bb;font-size:12px">Chartdaten momentan nicht verfügbar. Bitte später erneut versuchen.</div>';chart=null;series=null;}}
+function renderChartMarkers(){if(!series||!chartHistory[selected]||!series.setMarkers)return;series.setMarkers(seriesMarkers(chartHistory[selected]));}
+async function updateLiveChart(){if(!series||!chartHistory[selected]?.length)return;const a=ASSETS[selected];try{let point;if(a.type==='crypto'){const interval=chartSettings.interval==='1D'?'1d':chartSettings.interval==='1W'?'1w':chartSettings.interval;const r=await fetch(`https://api.binance.com/api/v3/klines?symbol=${selected}&interval=${interval}&limit=1`,{cache:'no-store'});if(!r.ok)return;const k=(await r.json())[0];if(!k)return;point={time:Math.floor(k[0]/1000),open:+k[1]*usdToEur,high:+k[2]*usdToEur,low:+k[3]*usdToEur,close:+k[4]*usdToEur};}else{const p=eurPrice(selected),ts=priceTimes[selected]||0;if(!p||Date.now()-ts>5*60*1000)return;const now=new Date(),today=Math.floor(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate())/1000),arr=chartHistory[selected],last=arr[arr.length-1];if(today<last.time)return;point=today===last.time?{...last,high:Math.max(last.high,p),low:Math.min(last.low,p),close:p}:{time:today,open:last.close,high:Math.max(last.close,p),low:Math.min(last.close,p),close:p};}const arr=chartHistory[selected],last=arr[arr.length-1];if(point.time<last.time)return;if(point.time===last.time)arr[arr.length-1]=point;else arr.push(point);series.update(chartKind==='line'||chartKind==='area'?{time:point.time,value:point.close}:point);if(series.setMarkers)series.setMarkers(seriesMarkers(arr));}catch(e){/* live chart refresh is best-effort; last full chart remains visible */}}
+function renderDip(){const d=active().dip[selected];$('dipBadge').textContent=d?.enabled?'AKTIV':'AUS';$('dipBadge').className='tag '+(d?.enabled?'buy':'sell');$('dipArmBtn').textContent=d?.enabled?'Strategie stoppen':'Buy the Dip aktivieren';$('dipStatus').textContent=d?.enabled?`Aktiv · Hoch seit Start: ${money(d.peak)} · Auslöser bei ${money(d.peak*(1-d.drop/100))} · Einsatz ${money(d.amount)}`:'Strategie aus. Beim Aktivieren wird der aktuelle Kurs als Startpunkt genommen.';}
+function armDip(){const drop=Number($('dipDrop').value),amount=Number($('dipAmount').value),p=eurPrice(selected);if(active().dip[selected]?.enabled){active().dip[selected].enabled=false;save();renderDip();notify('Buy the Dip gestoppt.');return;}if(!(drop>0&&drop<=50&&amount>0&&p>0)){notify('Bitte gültigen Rückgang, Betrag und aktuellen Kurs eingeben.');return;}active().dip[selected]={enabled:true,drop,amount,peak:p,armedAt:Date.now()};save();renderDip();notify('Buy the Dip für '+ASSETS[selected].name+' aktiviert.');}
+function checkDip(){const a=active();for(const [s,d] of Object.entries(a.dip)){if(!d.enabled||!prices[s])continue;const p=prices[s];if(p>d.peak)d.peak=p;const trigger=d.peak*(1-d.drop/100);if(p<=trigger){const q=d.amount/p;d.enabled=false;if(addTrade(s,'buy',q,p,true)){notify(`Buy the Dip ausgelöst: ${ASSETS[s].name} für ${money(d.amount)} (virtuell).`);}else notify(`Buy the Dip bei ${ASSETS[s].name}: nicht genug virtuelles Guthaben.`);save();}}
+}
+function switchAccount(id){if(!store.accounts.some(a=>a.id===id))return;store.activeId=id;save();renderAccountSelector();render();loadChart();}
+function openAccountModal(){$('accountModal').classList.add('open');$('newAccountName').value='';$('newAccountCapital').value='10000';$('newAccountName').focus();}
+function closeAccountModal(){$('accountModal').classList.remove('open');}
+function createAccount(){const name=$('newAccountName').value.trim()||`Demo-Konto ${store.accounts.length+1}`,capital=Number($('newAccountCapital').value);if(!(capital>0&&capital<=100000000)){notify('Bitte ein Startkapital zwischen 1 € und 100.000.000 € eingeben.');return;}const a=freshAccount(name,capital);store.accounts.push(a);store.activeId=a.id;save();closeAccountModal();renderAccountSelector();render();loadChart();notify(`Konto „${name}“ erstellt.`);}
+function activateNav(){const sections=['dashboard','markets','portfolio','history'];const links=[...document.querySelectorAll('[data-nav]')];const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle('active',l.dataset.nav===e.target.id));}),{rootMargin:'-20% 0px -65% 0px'});sections.forEach(id=>$(id)&&observer.observe($(id)));}
+$('assetSelect').addEventListener('change',e=>selectAsset(e.target.value));document.addEventListener('click',e=>{const t=e.target.closest('[data-symbol]');if(t)selectAsset(t.dataset.symbol)});$('chartInterval').addEventListener('change',()=>{chartSettings.interval=$('chartInterval').value;saveChartSettings();loadChart()});$('chartStyle').addEventListener('change',()=>{chartSettings.style=$('chartStyle').value;saveChartSettings();loadChart()});$('amount').addEventListener('input',updateEstimate);$('buyTab').addEventListener('click',()=>setSide('buy'));$('sellTab').addEventListener('click',()=>setSide('sell'));document.querySelectorAll('[data-qty]').forEach(b=>b.addEventListener('click',()=>{$('amount').value=b.dataset.qty;updateEstimate()}));$('tradeBtn').addEventListener('click',executeTrade);$('dipArmBtn').addEventListener('click',armDip);$('accountSelect').addEventListener('change',e=>switchAccount(e.target.value));$('newAccountBtn').addEventListener('click',openAccountModal);$('cancelAccountBtn').addEventListener('click',closeAccountModal);$('createAccountBtn').addEventListener('click',createAccount);$('accountModal').addEventListener('click',e=>{if(e.target===$('accountModal'))closeAccountModal()});$('resetBtn').addEventListener('click',()=>{if(confirm(`Das aktive Konto „${active().name}“ wirklich zurücksetzen? Alle Positionen und Trades dieses Kontos werden gelöscht.`)){const a=active();const fresh=freshAccount(a.name,a.startCapital);fresh.id=a.id;store.accounts[store.accounts.indexOf(a)]=fresh;save();render();loadChart();notify('Aktives Demo-Konto zurückgesetzt.');}});
+renderAccountSelector();renderAssetSelect();$('chartInterval').value=chartSettings.interval;$('chartStyle').value=chartSettings.style;activateNav();createChart();setSide('buy');render();loadChart();
+(async()=>{await fetchFx();await fetchCrypto();await fetchMetals();checkDip();render();loadChart();})();
+setInterval(async()=>{await fetchCrypto();render();checkDip();if(ASSETS[selected].type==='crypto')updateLiveChart();},10000);setInterval(async()=>{await fetchMetals();checkDip();if(ASSETS[selected].type==='metal')updateLiveChart();},60000);setInterval(async()=>{await fetchFx();await fetchCrypto();render();checkDip();},300000);
+})();
+</script>
+<script>if('serviceWorker'in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));</script>
+</body></html>
