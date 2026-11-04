@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucky Lounge – Spielcasino</title>
+<style>
+:root{--bg:#0b1020;--panel:#151d32;--panel2:#1b2740;--gold:#f5c451;--green:#25c58a;--muted:#9eabc3;--red:#f06b75}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#182747 0,#0b1020 55%);color:#f4f6fb;font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{padding:22px max(18px,calc((100% - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #ffffff14;background:#0b1020cc;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{font-weight:900;font-size:22px;letter-spacing:.4px}.brand span{color:var(--gold)}.balance{background:#202b43;border:1px solid #ffffff20;border-radius:14px;padding:10px 15px;font-weight:800;color:var(--gold)}
+main{max-width:1180px;margin:auto;padding:26px 18px 60px}.hero{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:22px}.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}.hero h1{font-size:clamp(28px,5vw,44px);margin:5px 0}.hero p{color:var(--muted);margin:0;max-width:650px;line-height:1.5}
+.notice{font-size:12px;color:#b7c2d6;background:#ffffff09;border:1px solid #ffffff18;border-radius:12px;padding:10px 13px;max-width:230px}
+.layout{display:grid;grid-template-columns:245px 1fr;gap:18px}.sidebar,.game-area{background:#111a2d;border:1px solid #ffffff14;border-radius:18px;padding:15px}.side-title{font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin:4px 8px 12px}
+.game-list{display:grid;gap:6px}.game-btn{width:100%;text-align:left;background:transparent;color:#dce4f3;border:0;border-radius:11px;padding:11px 12px;cursor:pointer;font:inherit;display:flex;gap:10px;align-items:center}.game-btn:hover,.game-btn.active{background:#263451;color:white}.game-btn.active{outline:1px solid #f5c45166}.game-icon{width:28px;text-align:center;font-size:19px}
+.game-area{min-height:510px;padding:22px}.game-head{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:18px}.game-head h2{margin:0 0 4px;font-size:25px}.game-head p{margin:0;color:var(--muted);font-size:14px}.tag{font-size:11px;color:var(--gold);border:1px solid #f5c45155;padding:5px 8px;border-radius:20px;white-space:nowrap}
+.playbox{background:linear-gradient(145deg,#1b2944,#121c30);border:1px solid #ffffff14;border-radius:16px;padding:22px;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.big-result{font-size:clamp(36px,7vw,62px);font-weight:900;letter-spacing:2px;margin:10px 0 18px;color:var(--gold);min-height:75px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:12px}
+input,select{background:#0e1729;color:white;border:1px solid #ffffff30;border-radius:10px;padding:11px 12px;font:inherit;min-width:100px}
+button.primary,button.secondary{border:0;border-radius:11px;padding:11px 18px;font:inherit;font-weight:800;cursor:pointer}
+.primary{background:var(--gold);color:#1a1b20}.primary:hover{filter:brightness(1.08)}.secondary{background:#30415f;color:white}.secondary:hover{background:#3b5278}
+button:disabled{opacity:.45;cursor:not-allowed}.message{min-height:26px;margin-top:15px;color:#c9d5e9;font-weight:650}.good{color:var(--green)!important}.bad{color:var(--red)!important}
+.small{font-size:12px;color:var(--muted);margin-top:10px}.cards{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.playing-card{width:58px;height:82px;background:#f6f4ee;color:#182033;border-radius:8px;display:grid;place-items:center;font-size:22px;font-weight:900;box-shadow:0 4px 12px #0005}.playing-card.red{color:#d33d4e}
+.grid-mines{display:grid;grid-template-columns:repeat(5,48px);gap:7px}.mine-cell{width:48px;height:48px;border:1px solid #ffffff25;border-radius:9px;background:#30415f;color:white;font-size:20px;cursor:pointer}.mine-cell.revealed{background:#1d765c}.mine-cell.mine{background:#a83b4a}
+.history{margin-top:15px;color:var(--muted);font-size:12px}
+@keyframes popIn{0%{transform:scale(.72) rotate(-5deg);opacity:.25}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes shimmer{0%{filter:brightness(.8);transform:translateY(0)}50%{filter:brightness(1.55);transform:translateY(-5px)}100%{filter:brightness(1);transform:translateY(0)}}
+@keyframes spin{0%{transform:rotate(0) scale(.8)}65%{transform:rotate(760deg) scale(1.08)}100%{transform:rotate(1080deg) scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 #f5c45100}50%{box-shadow:0 0 26px #f5c45155}}
+.big-result.animate{animation:popIn .48s cubic-bezier(.2,.8,.2,1)}
+.big-result.spinning{animation:spin 1.05s cubic-bezier(.15,.7,.15,1)}
+.big-result.win{animation:shimmer .7s ease 2;color:#ffe28a}
+.big-result.lose{animation:shake .42s ease;color:var(--red)}
+.playing-card{animation:popIn .35s ease both}
+.mine-cell{transition:transform .16s ease,background .2s ease,box-shadow .2s ease}
+.mine-cell:not(:disabled):hover{transform:translateY(-3px) scale(1.06);box-shadow:0 7px 18px #0006}
+.mine-cell.revealed{animation:popIn .25s ease;background:#1d765c}
+.mine-cell.mine{animation:shake .4s ease;background:#a83b4a}
+.primary{transition:transform .15s ease,filter .15s ease,box-shadow .15s ease}
+.primary:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 7px 20px #f5c45135}
+.primary:not(:disabled):active{transform:scale(.97)}.footer{text-align:center;color:#7887a2;font-size:12px;margin-top:22px}
+@media(max-width:760px){header{padding:15px 18px}.layout{grid-template-columns:1fr}.sidebar{padding:12px}.game-list{display:flex;overflow-x:auto;padding-bottom:3px}.game-btn{width:auto;white-space:nowrap}.side-title{display:none}.hero{align-items:start;flex-direction:column}.notice{max-width:none}.game-area{padding:15px}.playbox{padding:16px}.grid-mines{grid-template-columns:repeat(5, min(48px,14vw));gap:5px}.mine-cell{width:min(48px,14vw);height:min(48px,14vw)}}
+</style>
+</head>
+<body>
+<header><div class="brand">🎰 LUCKY <span>LOUNGE</span></div><div class="balance">🪙 <span id="balance">1.000</span> Spielmünzen</div></header>
+<main>
+<section class="hero"><div><div class="eyebrow">Dein virtuelles Spielcasino</div><h1>Willkommen in der Lucky Lounge</h1><p>Wähle eines von zehn Spielen, setze Spielmünzen und probiere dein Glück. Ganz ohne echtes Geld.</p></div><div class="notice">ℹ️ Nur Spielgeld – keine Einzahlungen, Auszahlungen oder Echtgeldpreise.</div></section>
+<div class="layout">
+<aside class="sidebar"><div class="side-title">Spiele entdecken</div><nav class="game-list" id="gameList"></nav><div class="history" id="stats">Runden: 0 · Gewinn: 0</div><button class="secondary" style="width:100%;margin-top:14px" onclick="resetBalance()">↻ Spielstand zurücksetzen</button></aside>
+<section class="game-area"><div class="game-head"><div><h2 id="gameTitle">🎰 Spielautomaten</h2><p id="gameDesc">Drei Walzen, ein Einsatz und hoffentlich ein Treffer.</p></div><span class="tag">NUR SPIELGELD</span></div><div class="playbox" id="playbox"></div></section>
+</div><div class="footer">Lucky Lounge · Spielgeld-Casino · Dein Spielstand wird auf diesem Gerät gespeichert.</div>
+</main>
+<script>
+const games=[
+ {id:'slots',name:'Spielautomat',icon:'🎰',desc:'Drei gleiche Symbole bringen den großen Gewinn.'},
+ {id:'roulette',name:'Roulette',icon:'🎡',desc:'Wähle eine Zahl oder eine Farbe und lass die Kugel rollen.'},
+ {id:'blackjack',name:'Blackjack',icon:'🃏',desc:'Komme möglichst nah an 21, ohne sie zu überschreiten.'},
+ {id:'dice',name:'Würfel-Duell',icon:'🎲',desc:'Tippe, ob der Würfel höher oder niedriger als 3 landet.'},
+ {id:'coin',name:'Münzwurf',icon:'🪙',desc:'Kopf oder Zahl – einfach und schnell.'},
+ {id:'hilo',name:'Höher oder tiefer',icon:'📈',desc:'Schätze, ob die nächste Karte höher oder niedriger ist.'},
+ {id:'mines',name:'Minenfeld',icon:'💣',desc:'Finde sichere Felder und kassiere deinen wachsenden Gewinn.'},
+ {id:'wheel',name:'Glücksrad',icon:'🎯',desc:'Drehe das Rad und gewinne einen Multiplikator.'},
+ {id:'baccarat',name:'Punkteduell',icon:'⚔️',desc:'Deine Karte gegen die Bank – wer kommt näher an 9?' },
+ {id:'plinko',name:'Plinko',icon:'🔴',desc:'Lass die Kugel fallen und hoffe auf einen guten Multiplikator.'}
+];
+let balance=Number(localStorage.getItem('ll_balance')||1000), rounds=0, net=0, current='slots';
+let blackjack=null,hiloCard=null,mines=null;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem('ll_balance',balance);$('balance').textContent=balance.toLocaleString('de-DE');$('stats').textContent=`Runden: ${rounds} · Netto: ${net>0?'+':''}${net.toLocaleString('de-DE')}`;}
+function betInput(value=20){return `<label>Einsatz <input id="bet" type="number" min="1" max="${balance}" value="${Math.min(value,Math.max(1,balance))}" step="1"></label>`}
+function bet(){let n=Number($('bet')?.value);if(!Number.isInteger(n)||n<1||n>balance){msg('Bitte einen gültigen Einsatz eingeben.','bad');return null}return n}
+function msg(t,c=''){let e=$('message');if(e){e.textContent=t;e.className='message '+c}}
+function animateResult(kind='animate'){let e=$('playbox')?.querySelector('.big-result');if(!e)return;e.classList.remove('animate','spinning','win','lose');void e.offsetWidth;e.classList.add(kind)}
+function settle(stake,payout){balance+=payout-stake;net+=payout-stake;rounds++;save();return payout-stake}
+function shell(content){$('playbox').innerHTML=content}
+function selectGame(id){current=id;let g=games.find(x=>x.id===id);$('gameTitle').textContent=g.icon+' '+g.name;$('gameDesc').textContent=g.desc;document.querySelectorAll('.game-btn').forEach(b=>b.classList.toggle('active',b.dataset.id===id));render()}
+function render(){let f={slots:slots,roulette:roulette,blackjack:bj,dice:dice,coin:coin,hilo:hilo,mines:minesGame,wheel:wheel,baccarat:baccarat,plinko:plinko};f[current]()}
+function slots(){shell(`${betInput()}<div class="big-result" id="slotResult">🍒　⭐　💎</div><div class="controls"><button class="primary" onclick="spinSlots()">DREHEN</button></div><div class="message" id="message">Drei gleiche Symbole zahlen das 5-Fache aus. Drei 💎 zahlen das 12-Fache!</div>`)}
+function spinSlots(){let b=bet();if(!b)return;animateResult('spinning');let a=['🍒','🍋','🔔','⭐','💎','🍀'],r=Array.from({length:3},()=>a[Math.floor(Math.random()*a.length)]);$('slotResult').textContent=r.join('　');let mult=r.every(x=>x===r[0])?(r[0]==='💎'?12:5):r.filter(x=>x===r[0]).length===2?1.5:0;let p=Math.floor(b*mult);let d=settle(b,p);animateResult(p?'win':'lose');msg(p?`Treffer! ${p} Münzen Auszahlung · ${d>0?'+':''}${d} netto.`:'Leider kein Treffer. Versuch es erneut.',p?'good':'bad')}
+function roulette(){shell(`${betInput()}<div class="controls"><label>Dein Tipp <select id="rt"><option value="red">Rot</option><option value="black">Schwarz</option><option value="green">Grün (0)</option><option value="number">Exakte Zahl</option></select></label><input id="rn" type="number" min="0" max="36" value="17" style="display:none"></div><div class="big-result" id="rouletteResult">🎡</div><button class="primary" onclick="spinRoulette()">KUGEL STARTEN</button><div class="message" id="message">Rot/Schwarz: 2× · Grün: 14× · Zahl exakt: 30× Auszahlung.</div>`);$('rt').onchange=()=>{$('rn').style.display=$('rt').value==='number'?'block':'none'}}
+function spinRoulette(){let b=bet();if(!b)return;animateResult('spinning');let n=Math.floor(Math.random()*37),color=n===0?'green':n%2?'red':'black';$('rouletteResult').textContent=`${n} · ${color==='red'?'🔴':color==='black'?'⚫':'🟢'}`;let t=$('rt').value,win=t==='number'?n===Number($('rn').value):t===color,m=t==='number'?30:t==='green'?14:2,p=win?b*m:0,d=settle(b,p);msg(win?`Gewonnen! Auszahlung ${p} Münzen.`:'Leider verloren. Die Kugel landete auf '+n+'.',win?'good':'bad')}
+function card(){let v=Math.ceil(Math.random()*13);return {v,txt:v===1?'A':v===11?'J':v===12?'Q':v===13?'K':String(v),s:['♠','♥','♦','♣'][Math.floor(Math.random()*4)]}}
+function val(c){return c.v===1?11:c.v>10?10:c.v}
+function handValue(h){let s=h.reduce((a,c)=>a+val(c),0),aces=h.filter(c=>c.v===1).length;while(s>21&&aces-- >0)s-=10;return s}
+function cardHTML(c){return `<span class="playing-card ${c.s==='♥'||c.s==='♦'?'red':''}">${c.txt}${c.s}</span>`}
+function bj(){blackjack=null;shell(`${betInput()}<div class="cards" id="bjDealer"></div><div class="small">BANK</div><div class="big-result" id="bjInfo">🃏 Blackjack</div><div class="cards" id="bjPlayer"></div><div class="small">DU</div><div class="controls"><button class="primary" id="bjStart" onclick="startBJ()">STARTEN</button><button class="secondary" id="bjHit" onclick="hitBJ()" disabled>KARTE</button><button class="secondary" id="bjStand" onclick="standBJ()" disabled>HALTEN</button></div><div class="message" id="message">Blackjack zahlt 2,5× aus, normaler Sieg 2×.</div>`)}
+function startBJ(){let b=bet();if(!b)return;blackjack={b,p:[card(),card()],d:[card(),card()],done:false};$('bjStart').disabled=true;$('bjHit').disabled=false;$('bjStand').disabled=false;showBJ();if(handValue(blackjack.p)===21)standBJ()}
+function showBJ(){let x=blackjack;$('bjPlayer').innerHTML=x.p.map(cardHTML).join('');$('bjDealer').innerHTML=(x.done?x.d:[x.d[0],{txt:'?',s:'🂠'}]).map(cardHTML).join('');$('bjInfo').textContent=`Du: ${handValue(x.p)}${x.done?' · Bank: '+handValue(x.d):''}`}
+function hitBJ(){if(!blackjack||blackjack.done)return;blackjack.p.push(card());if(handValue(blackjack.p)>21){blackjack.done=true;settle(blackjack.b,0);$('bjHit').disabled=true;$('bjStand').disabled=true;$('bjStart').disabled=false;showBJ();msg('Überkauft – du hast verloren.','bad')}else showBJ()}
+function standBJ(){if(!blackjack||blackjack.done)return;let x=blackjack;while(handValue(x.d)<17)x.d.push(card());x.done=true;let p=0,pl=handValue(x.p),dl=handValue(x.d);if(pl>dl||dl>21)p=pl===21&&x.p.length===2?Math.floor(x.b*2.5):x.b*2;else if(pl===dl)p=x.b;let d=settle(x.b,p);$('bjHit').disabled=true;$('bjStand').disabled=true;$('bjStart').disabled=false;showBJ();msg(pl>21?'Überkauft.':p>x.b?'Du gewinnst! Auszahlung '+p+'.':p===x.b?'Unentschieden – Einsatz zurück.':'Die Bank gewinnt.',p>x.b?'good':p===x.b?'':'bad')}
+function dice(){shell(`${betInput()}<div class="controls"><label>Vorhersage <select id="diceGuess"><option value="high">4, 5 oder 6</option><option value="low">1, 2 oder 3</option></select></label></div><div class="big-result" id="diceResult">🎲</div><button class="primary" onclick="rollDice()">WÜRFELN</button><div class="message" id="message">Richtiger Tipp: 2× Auszahlung.</div>`)}
+function rollDice(){let b=bet();if(!b)return;let n=1+Math.floor(Math.random()*6);$('diceResult').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][n-1];let win=$('diceGuess').value===(n>=4?'high':'low'),p=win?b*2:0;settle(b,p);animateResult(win?'win':'lose');msg(win?`Richtig! Der Würfel zeigt ${n}. Auszahlung ${p}.`:`Leider falsch – es war eine ${n}.`,win?'good':'bad')}
+function coin(){shell(`${betInput()}<div class="controls"><label>Dein Tipp <select id="coinGuess"><option value="Kopf">Kopf</option><option value="Zahl">Zahl</option></select></label></div><div class="big-result" id="coinResult">🪙</div><button class="primary" onclick="flipCoin()">WERFEN</button><div class="message" id="message">Richtiger Tipp: 2× Auszahlung.</div>`)}
+function flipCoin(){let b=bet();if(!b)return;let r=Math.random()<.5?'Kopf':'Zahl',w=$('coinGuess').value===r,p=w?b*2:0;$('coinResult').textContent=r==='Kopf'?'🙂':'🔢';settle(b,p);animateResult(w?'win':'lose');msg(w?`Richtig! ${r} – Auszahlung ${p}.`:`Es ist ${r}.`,w?'good':'bad')}
+function hilo(){hiloCard=null;shell(`${betInput()}<div class="big-result" id="hiloCard">🂠</div><div class="controls"><button class="secondary" onclick="guessHilo('high')">NÄCHSTE HÖHER</button><button class="secondary" onclick="guessHilo('low')">NÄCHSTE TIEFER</button><button class="primary" onclick="newHilo()">NEUE RUNDE</button></div><div class="message" id="message">Starte eine Runde. Richtiger Tipp zahlt 2× aus.</div>`)}
+function newHilo(){hiloCard=card();$('hiloCard').textContent=hiloCard.txt+hiloCard.s;msg('Karte liegt. Höher oder tiefer?')}
+function guessHilo(g){let b=bet();if(!b)return;if(!hiloCard){msg('Erst „Neue Runde“ drücken.','bad');return}let next=card();$('hiloCard').textContent=next.txt+next.s;let win=g==='high'?next.v>hiloCard.v:next.v<hiloCard.v,p=win?b*2:0;settle(b,p);hiloCard=next;msg(win?'Richtig getippt! Auszahlung '+p+'.':'Falsch oder gleiche Karte. Einsatz verloren.',win?'good':'bad')}
+function minesGame(){mines=null;shell(`${betInput()}<div class="small">Es gibt 3 versteckte Minen unter 25 Feldern. Jeder sichere Edelstein erhöht deinen möglichen Gewinn. Triffst du eine Mine, verlierst du den Einsatz.</div><div class="grid-mines" id="mineGrid"></div><div class="controls"><button class="primary" onclick="startMines()">NEUES FELD</button><button class="secondary" id="cashMine" onclick="cashMines()" disabled>GEWINN SICHERN</button></div><div class="message" id="message">Einsatz wählen und neues Feld starten.</div>`);drawMines()}
+function drawMines(revealAll=false){if(!mines)return;$('mineGrid').innerHTML=mines.cells.map((v,i)=>{let shown=v==='safe'?'💎':v==='mine'?'💣':revealAll&&mines.mineIds.includes(i)?'💣':'?';return `<button class="mine-cell ${v==='safe'?'revealed':v==='mine'?'mine':''}" ${v||mines.done?'disabled':''} onclick="pickMine(${i})">${shown}</button>`}).join('')}
+function startMines(){let b=bet();if(!b)return;let ids=[];while(ids.length<3){let n=Math.floor(Math.random()*25);if(!ids.includes(n))ids.push(n)}mines={b,cells:Array(25).fill(null),mineIds:ids,hits:0,done:false};$('cashMine').disabled=true;drawMines();msg('Finde die Edelsteine – aber pass auf die Minen auf!')}
+function pickMine(i){if(!mines||mines.done||mines.cells[i]!==null)return;if(mines.mineIds.includes(i)){mines.cells[i]='mine';mines.done=true;settle(mines.b,0);$('cashMine').disabled=true;drawMines(true);animateResult('lose');msg('💥 BOOM! Du hast eine Mine getroffen und deinen Einsatz verloren.','bad')}else{mines.cells[i]='safe';mines.hits++;$('cashMine').disabled=false;drawMines();animateResult('win');let multiplier=(1+mines.hits*.35).toFixed(2);msg(`💎 Sicher! ${mines.hits} Edelstein${mines.hits===1?'':'e'} gefunden. Aktueller möglicher Gewinn: ${Math.floor(mines.b*Number(multiplier))} Münzen (${multiplier}×).`,'good')}}
+function cashMines(){if(!mines||mines.done||!mines.hits)return;let mult=1+mines.hits*.35,p=Math.floor(mines.b*mult);mines.done=true;settle(mines.b,p);$('cashMine').disabled=true;drawMines(true);animateResult('win');msg(`🎉 Gewinn gesichert: ${p} Münzen Auszahlung (${mult.toFixed(2)}×).`,'good')}
+function wheel(){shell(`${betInput()}<div class="big-result" id="wheelResult">🎯</div><button class="primary" onclick="spinWheel()">RAD DREHEN</button><div class="message" id="message">Mögliche Multiplikatoren: 0×, 0,5×, 1×, 2×, 3× oder 5×.</div>`)}
+function spinWheel(){let b=bet();if(!b)return;let opts=[0,0,.5,1,1,2,3,5],m=opts[Math.floor(Math.random()*opts.length)];$('wheelResult').textContent=['❌','½×','1×','2×','3×','5×'][m===0?0:m===.5?1:m===1?2:m===2?3:m===3?4:5];let p=Math.floor(b*m);settle(b,p);animateResult(p>b?'win':p===0?'lose':'animate');msg(`${m}× – Auszahlung ${p} Münzen.`,p>b?'good':p===b?'':'bad')}
+function baccarat(){shell(`${betInput()}<div class="big-result" id="bacResult">⚔️</div><button class="primary" onclick="playBac()">DUELL STARTEN</button><div class="message" id="message">Ziehe eine Karte für dich und die Bank. Ass = 1, Bildkarten = 0. Auszahlung: 2×.</div>`)}
+function playBac(){let b=bet();if(!b)return;let a=card(),d=card(),av=val(a)%10,dv=val(d)%10;$('bacResult').textContent=`${a.txt}${a.s}  ${av}  VS  ${d.txt}${d.s}  ${dv}`;let p=av===dv?b:av>dv?b*2:0;settle(b,p);animateResult(av>dv?'win':av<dv?'lose':'animate');msg(av===dv?'Gleichstand – Einsatz zurück.':av>dv?'Du gewinnst! Auszahlung '+p+'.':'Die Bank gewinnt.',av>dv?'good':av===dv?'':'bad')}
+function plinko(){shell(`${betInput()}<div class="small">Die Kugel landet zufällig in einem Fach. Multiplikatoren: 0× · 0,5× · 1× · 2× · 5×</div><div class="big-result" id="plinkoResult">🔴</div><button class="primary" onclick="dropPlinko()">KUGEL FALLEN LASSEN</button><div class="message" id="message">Viel Glück!</div>`)}
+function dropPlinko(){let b=bet();if(!b)return;let ms=[0,.5,1,2,5],m=ms[Math.floor(Math.random()*ms.length)],p=Math.floor(b*m);$('plinkoResult').textContent=['0×','0,5×','1×','2×','5×'][ms.indexOf(m)]+'  🔴';settle(b,p);animateResult(p>b?'win':p===0?'lose':'animate');msg(`Du landest bei ${m}×. Auszahlung: ${p} Münzen.`,p>b?'good':p===b?'':'bad')}
+function resetBalance(){if(confirm('Spielstand wirklich auf 1.000 Münzen zurücksetzen?')){balance=1000;rounds=0;net=0;save();selectGame(current)}}
+$('gameList').innerHTML=games.map(g=>`<button class="game-btn" data-id="${g.id}" onclick="selectGame('${g.id}')"><span class="game-icon">${g.icon}</span>${g.name}</button>`).join('');
+save();selectGame('slots');
+</script>
+</body></html>
